@@ -46,7 +46,9 @@ void initMeasure()
     WTIMER0_CFG_R = 4;                   // configure as 32-bit counter (A only)
     WTIMER0_TAMR_R = TIMER_TAMR_TACMR | TIMER_TAMR_TAMR_CAP | TIMER_TAMR_TACDIR; // configure for edge time mode, count up
     WTIMER0_CTL_R = TIMER_CTL_TAEVENT_POS; // measure time from positive edge to positive edge
+
     WTIMER0_TAV_R = 0;                          // zero counter for first period
+    WTIMER0_TBV_R = 0;
 
     //1: enable clocks
     SYSCTL_RCGCACMP_R |= 1;
@@ -59,6 +61,43 @@ void initMeasure()
     COMP_ACCTL0_R |= (2 << 9) | (1 << 1); //ASRCP && (1<<1) CINV we want to invert
 
     waitMicrosecond(10);
+
+}
+
+uint32_t measureResistance()
+{
+    //make function that disables all the pins
+    disablePins();
+    setPinValue(INTEGRATE, 1);
+    setPinValue(LOWSIDE, 1); //discharge //ground both sides of capacitor
+    waitMicrosecond(10e3); //wait a reasonable time
+    WTIMER0_CTL_R &= ~TIMER_CTL_TAEN;
+    //reset timer
+    WTIMER0_TAV_R = 0;
+    WTIMER0_TBV_R = 0;
+
+    setPinValue(LOWSIDE, 0);
+    setPinValue(MEASURE_LR, 1);
+
+    //turn on timer
+    WTIMER0_CTL_R |= TIMER_CTL_TAEN;
+
+    //stay blocking when it is not tripped
+    while (!1)
+    {
+
+    }
+    //make sure it is not counting
+    WTIMER0_CTL_R &= ~TIMER_CTL_TAEN;
+    ]
+
+    //do some math and divide to get accurate resistance
+    disablePins();
+    return WTIMER0_TAV_R / 1;
+}
+
+void disablePins()
+{
 
 }
 
