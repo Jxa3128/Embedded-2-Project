@@ -2,6 +2,7 @@
 //test resistance
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include "measurments.h"
 #include "clock.h"
 #include "gpio.h"
@@ -10,16 +11,19 @@
 #include "tm4c123gh6pm.h"
 #include "uart0.h"
 
+
 //increase the stack to 4096 for sprintf()
 void initHw()
 {
     // Initialize system clock to 40 MHz
     initSystemClockTo40Mhz();
+
 }
 
 int main(void)
 {
     initHw();
+    initMeasure();
     initUart0();
     setUart0BaudRate(115200, 40e6);
     putsUart0("Welcome to testing the board!\n\r");

@@ -12,7 +12,8 @@ C_SRCS += \
 ../main.c \
 ../measurements.c \
 ../tm4c123gh6pm_startup_ccs.c \
-../uart0.c 
+../uart0.c \
+../wait.c 
 
 C_DEPS += \
 ./clock.d \
@@ -20,7 +21,8 @@ C_DEPS += \
 ./main.d \
 ./measurements.d \
 ./tm4c123gh6pm_startup_ccs.d \
-./uart0.d 
+./uart0.d \
+./wait.d 
 
 OBJS += \
 ./clock.obj \
@@ -28,7 +30,8 @@ OBJS += \
 ./main.obj \
 ./measurements.obj \
 ./tm4c123gh6pm_startup_ccs.obj \
-./uart0.obj 
+./uart0.obj \
+./wait.obj 
 
 OBJS__QUOTED += \
 "clock.obj" \
@@ -36,7 +39,8 @@ OBJS__QUOTED += \
 "main.obj" \
 "measurements.obj" \
 "tm4c123gh6pm_startup_ccs.obj" \
-"uart0.obj" 
+"uart0.obj" \
+"wait.obj" 
 
 C_DEPS__QUOTED += \
 "clock.d" \
@@ -44,7 +48,8 @@ C_DEPS__QUOTED += \
 "main.d" \
 "measurements.d" \
 "tm4c123gh6pm_startup_ccs.d" \
-"uart0.d" 
+"uart0.d" \
+"wait.d" 
 
 C_SRCS__QUOTED += \
 "../clock.c" \
@@ -52,6 +57,7 @@ C_SRCS__QUOTED += \
 "../main.c" \
 "../measurements.c" \
 "../tm4c123gh6pm_startup_ccs.c" \
-"../uart0.c" 
+"../uart0.c" \
+"../wait.c" 
 
 

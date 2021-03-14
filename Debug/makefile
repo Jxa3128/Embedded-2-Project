@@ -14,6 +14,7 @@ ORDERED_OBJS += \
 "./measurements.obj" \
 "./tm4c123gh6pm_startup_ccs.obj" \
 "./uart0.obj" \
+"./wait.obj" \
 "../tm4c123gh6pm.cmd" \
 $(GEN_CMDS__FLAG) \
 -llibc.a \
@@ -157,8 +158,8 @@ Embedded2Project.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "clock.obj" "gpio.obj" "main.obj" "measurements.obj" "tm4c123gh6pm_startup_ccs.obj" "uart0.obj" 
-	-$(RM) "clock.d" "gpio.d" "main.d" "measurements.d" "tm4c123gh6pm_startup_ccs.d" "uart0.d" 
+	-$(RM) "clock.obj" "gpio.obj" "main.obj" "measurements.obj" "tm4c123gh6pm_startup_ccs.obj" "uart0.obj" "wait.obj" 
+	-$(RM) "clock.d" "gpio.d" "main.d" "measurements.d" "tm4c123gh6pm_startup_ccs.d" "uart0.d" "wait.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

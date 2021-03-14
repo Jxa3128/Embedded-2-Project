@@ -1,17 +1,17 @@
 ******************************************************************************
                   TI ARM Linker Unix v20.2.1                   
 ******************************************************************************
->> Linked Sat Mar 13 20:28:11 2021
+>> Linked Sat Mar 13 21:35:03 2021
 
 OUTPUT FILE NAME:   <Embedded2Project.out>
-ENTRY POINT SYMBOL: "_c_int00_noinit_noargs"  address: 00000859
+ENTRY POINT SYMBOL: "_c_int00_noinit_noargs"  address: 000010e5
 
 
 MEMORY CONFIGURATION
 
          name            origin    length      used     unused   attr    fill
 ----------------------  --------  ---------  --------  --------  ----  --------
-  FLASH                 00000000   00040000  000008a8  0003f758  R  X
+  FLASH                 00000000   00040000  00001158  0003eea8  R  X
   SRAM                  20000000   00008000  00000200  00007e00  RW X
 
 
@@ -19,9 +19,9 @@ SEGMENT ALLOCATION MAP
 
 run origin  load origin   length   init length attrs members
 ----------  ----------- ---------- ----------- ----- -------
-00000000    00000000    000008a8   000008a8    r-x
+00000000    00000000    00001158   00001158    r-x
   00000000    00000000    0000026c   0000026c    r-- .intvecs
-  0000026c    0000026c    0000063c   0000063c    r-x .text
+  0000026c    0000026c    00000eec   00000eec    r-x .text
 20000000    20000000    00000200   00000000    rw-
   20000000    20000000    00000200   00000000    rw- .stack
 
@@ -34,14 +34,17 @@ section   page    origin      length       input sections
 .intvecs   0    00000000    0000026c     
                   00000000    0000026c     tm4c123gh6pm_startup_ccs.obj (.intvecs)
 
-.text      0    0000026c    0000063c     
-                  0000026c    000004f4     uart0.obj (.text)
-                  00000760    000000f8     main.obj (.text)
-                  00000858    0000002c     rtsv7M4_T_le_v4SPD16_eabi.lib : boot_cortex_m.c.obj (.text:_c_int00_noinit_noargs:_c_int00_noinit_noargs)
-                  00000884    00000010     clock.obj (.text)
-                  00000894    0000000c     tm4c123gh6pm_startup_ccs.obj (.text)
-                  000008a0    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : pre_init.c.obj (.text:_system_pre_init)
-                  000008a4    00000004                                   : exit.c.obj (.text:abort:abort)
+.text      0    0000026c    00000eec     
+                  0000026c    000007c0     gpio.obj (.text)
+                  00000a2c    000004f4     uart0.obj (.text)
+                  00000f20    000000fc     main.obj (.text)
+                  0000101c    000000c8     measurements.obj (.text)
+                  000010e4    0000002c     rtsv7M4_T_le_v4SPD16_eabi.lib : boot_cortex_m.c.obj (.text:_c_int00_noinit_noargs:_c_int00_noinit_noargs)
+                  00001110    00000024     wait.obj (.text)
+                  00001134    00000010     clock.obj (.text)
+                  00001144    0000000c     tm4c123gh6pm_startup_ccs.obj (.text)
+                  00001150    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : pre_init.c.obj (.text:_system_pre_init)
+                  00001154    00000004                                   : exit.c.obj (.text:abort:abort)
 
 .cinit     0    00000000    00000000     UNINITIALIZED
 
@@ -60,12 +63,15 @@ MODULE SUMMARY
        Module                         code   ro data   rw data
        ------                         ----   -------   -------
     ./
+       gpio.obj                       1984   0         0      
        uart0.obj                      1268   0         0      
        tm4c123gh6pm_startup_ccs.obj   12     620       0      
-       main.obj                       248    0         0      
+       main.obj                       252    0         0      
+       measurements.obj               200    0         0      
+       wait.obj                       36     0         0      
        clock.obj                      16     0         0      
     +--+------------------------------+------+---------+---------+
-       Total:                         1544   620       0      
+       Total:                         3768   620       0      
                                                               
     /Applications/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/lib/rtsv7M4_T_le_v4SPD16_eabi.lib
        boot_cortex_m.c.obj            44     0         0      
@@ -76,90 +82,140 @@ MODULE SUMMARY
                                                               
        Stack:                         0      0         512    
     +--+------------------------------+------+---------+---------+
-       Grand Total:                   1596   620       512    
+       Grand Total:                   3820   620       512    
 
 
 GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
 
-address   name                   
--------   ----                   
-000008a5  C$$EXIT                
-00000895  ResetISR               
-20000200  __STACK_END            
-00000200  __STACK_SIZE           
-20000200  __STACK_TOP            
-ffffffff  __TI_pprof_out_hndl    
-ffffffff  __TI_prof_data_size    
-ffffffff  __TI_prof_data_start   
-00000000  __TI_static_base__     
-ffffffff  __binit__              
-ffffffff  __c_args__             
-UNDEFED   __mpu_init             
-20000000  __stack                
-20000000  __start___llvm_prf_cnts
-20000000  __stop___llvm_prf_cnts 
-00000859  _c_int00_noinit_noargs 
-000008a1  _system_pre_init       
-000008a5  abort                  
-ffffffff  binit                  
-00000000  g_pfnVectors           
-00000605  getFieldInteger        
-00000575  getFieldString         
-00000369  getcUart0              
-0000037d  getsUart0              
-00000761  initHw                 
-00000885  initSystemClockTo40Mhz 
-0000026d  initUart0              
-0000066b  isCommand              
-00000743  kbhitUart0             
-00000769  main                   
-00000697  myCompare              
-00000403  parseFields            
-00000321  putcUart0              
-0000033d  putsUart0              
-000002f5  setUart0BaudRate       
-000006e7  stringCompare          
+address   name                         
+-------   ----                         
+00001155  C$$EXIT                      
+00001145  ResetISR                     
+20000200  __STACK_END                  
+00000200  __STACK_SIZE                 
+20000200  __STACK_TOP                  
+ffffffff  __TI_pprof_out_hndl          
+ffffffff  __TI_prof_data_size          
+ffffffff  __TI_prof_data_start         
+00000000  __TI_static_base__           
+ffffffff  __binit__                    
+ffffffff  __c_args__                   
+UNDEFED   __mpu_init                   
+20000000  __stack                      
+20000000  __start___llvm_prf_cnts      
+20000000  __stop___llvm_prf_cnts       
+000010e5  _c_int00_noinit_noargs       
+00001151  _system_pre_init             
+00001155  abort                        
+ffffffff  binit                        
+0000089d  disablePinInterrupt          
+000005d5  disablePinPulldown           
+0000058d  disablePinPullup             
+00000329  disablePort                  
+00000879  enablePinInterrupt           
+000005b1  enablePinPulldown            
+0000055f  enablePinPullup              
+0000026d  enablePort                   
+00000000  g_pfnVectors                 
+00000dc5  getFieldInteger              
+00000d35  getFieldString               
+000008e7  getPinValue                  
+0000099d  getPortValue                 
+00000b29  getcUart0                    
+00000b3d  getsUart0                    
+00000f21  initHw                       
+0000101d  initMeasure                  
+00001135  initSystemClockTo40Mhz       
+00000a2d  initUart0                    
+00000e2b  isCommand                    
+00000f03  kbhitUart0                   
+00000f29  main                         
+00000e57  myCompare                    
+00000bc3  parseFields                  
+00000ae1  putcUart0                    
+00000afd  putsUart0                    
+00000493  selectPinAnalogInput         
+00000445  selectPinDigitalInput        
+000007af  selectPinInterruptBothEdges  
+0000075f  selectPinInterruptFallingEdge
+00000805  selectPinInterruptHighLevel  
+0000083f  selectPinInterruptLowLevel   
+0000070f  selectPinInterruptRisingEdge 
+000003f7  selectPinOpenDrainOutput     
+000003a9  selectPinPushPullOutput      
+000005fd  setPinAuxFunction            
+000004e3  setPinCommitControl          
+000008c1  setPinValue                  
+00000919  setPortValue                 
+00000ab5  setUart0BaudRate             
+00000ea7  stringCompare                
+00001111  waitMicrosecond              
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
 
-address   name                   
--------   ----                   
-00000000  __TI_static_base__     
-00000000  g_pfnVectors           
-00000200  __STACK_SIZE           
-0000026d  initUart0              
-000002f5  setUart0BaudRate       
-00000321  putcUart0              
-0000033d  putsUart0              
-00000369  getcUart0              
-0000037d  getsUart0              
-00000403  parseFields            
-00000575  getFieldString         
-00000605  getFieldInteger        
-0000066b  isCommand              
-00000697  myCompare              
-000006e7  stringCompare          
-00000743  kbhitUart0             
-00000761  initHw                 
-00000769  main                   
-00000859  _c_int00_noinit_noargs 
-00000885  initSystemClockTo40Mhz 
-00000895  ResetISR               
-000008a1  _system_pre_init       
-000008a5  C$$EXIT                
-000008a5  abort                  
-20000000  __stack                
-20000000  __start___llvm_prf_cnts
-20000000  __stop___llvm_prf_cnts 
-20000200  __STACK_END            
-20000200  __STACK_TOP            
-ffffffff  __TI_pprof_out_hndl    
-ffffffff  __TI_prof_data_size    
-ffffffff  __TI_prof_data_start   
-ffffffff  __binit__              
-ffffffff  __c_args__             
-ffffffff  binit                  
-UNDEFED   __mpu_init             
+address   name                         
+-------   ----                         
+00000000  __TI_static_base__           
+00000000  g_pfnVectors                 
+00000200  __STACK_SIZE                 
+0000026d  enablePort                   
+00000329  disablePort                  
+000003a9  selectPinPushPullOutput      
+000003f7  selectPinOpenDrainOutput     
+00000445  selectPinDigitalInput        
+00000493  selectPinAnalogInput         
+000004e3  setPinCommitControl          
+0000055f  enablePinPullup              
+0000058d  disablePinPullup             
+000005b1  enablePinPulldown            
+000005d5  disablePinPulldown           
+000005fd  setPinAuxFunction            
+0000070f  selectPinInterruptRisingEdge 
+0000075f  selectPinInterruptFallingEdge
+000007af  selectPinInterruptBothEdges  
+00000805  selectPinInterruptHighLevel  
+0000083f  selectPinInterruptLowLevel   
+00000879  enablePinInterrupt           
+0000089d  disablePinInterrupt          
+000008c1  setPinValue                  
+000008e7  getPinValue                  
+00000919  setPortValue                 
+0000099d  getPortValue                 
+00000a2d  initUart0                    
+00000ab5  setUart0BaudRate             
+00000ae1  putcUart0                    
+00000afd  putsUart0                    
+00000b29  getcUart0                    
+00000b3d  getsUart0                    
+00000bc3  parseFields                  
+00000d35  getFieldString               
+00000dc5  getFieldInteger              
+00000e2b  isCommand                    
+00000e57  myCompare                    
+00000ea7  stringCompare                
+00000f03  kbhitUart0                   
+00000f21  initHw                       
+00000f29  main                         
+0000101d  initMeasure                  
+000010e5  _c_int00_noinit_noargs       
+00001111  waitMicrosecond              
+00001135  initSystemClockTo40Mhz       
+00001145  ResetISR                     
+00001151  _system_pre_init             
+00001155  C$$EXIT                      
+00001155  abort                        
+20000000  __stack                      
+20000000  __start___llvm_prf_cnts      
+20000000  __stop___llvm_prf_cnts       
+20000200  __STACK_END                  
+20000200  __STACK_TOP                  
+ffffffff  __TI_pprof_out_hndl          
+ffffffff  __TI_prof_data_size          
+ffffffff  __TI_prof_data_start         
+ffffffff  __binit__                    
+ffffffff  __c_args__                   
+ffffffff  binit                        
+UNDEFED   __mpu_init                   
 
-[36 symbols]
+[61 symbols]

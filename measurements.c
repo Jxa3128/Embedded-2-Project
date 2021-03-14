@@ -6,8 +6,21 @@
  */
 #include "measurments.h"
 #include "gpio.h"
+#include "wait.h"
 
-void initResistance()
+//define
+//left side of the board
+#define MEASURE_LR PORTA,2 //PA2
+#define MEASURE_C PORTE,2 //PE2
+#define ADC PORTE,4 //analog PE4(ADC)
+#define AC PORTC,7 //PC7(AC)
+
+//right side
+#define INTEGRATE PORTE,5 //PB5
+#define HIGHSIDE PORTA,3 //PA3
+#define LOWSIDE PORTA,7 //PA7
+
+void initMeasure()
 {
     // Enable clocks
     enablePort(PORTA);
@@ -24,31 +37,28 @@ void initResistance()
     selectPinPushPullOutput(LOWSIDE);
 
     //now we have to initialize the Analog Comparator
-    selectPinAnalogInput(Analog); //pe4 - AFSEL_R,DEN_R and AMSEL_R
+    selectPinAnalogInput(AC); //pe4 - AFSEL_R,DEN_R and AMSEL_R
 
-    /*
-     3:
-     In the GPIO module, enable the GPIO port/pin associated with the input signals as GPIO inputs.
-     To determine which GPIO to configure, see Table 23-4 on page 1344.
+    //enable a "narrow"/wide timer but it has to be 32-bit
+    // TIMER Configure
+    SYSCTL_RCGCWTIMER_R |= SYSCTL_RCGCWTIMER_R0;                // turn-on timer
+    WTIMER0_CTL_R &= ~TIMER_CTL_TAEN;   // turn-off counter before reconfiguring
+    WTIMER0_CFG_R = 4;                   // configure as 32-bit counter (A only)
+    WTIMER0_TAMR_R = TIMER_TAMR_TACMR | TIMER_TAMR_TAMR_CAP | TIMER_TAMR_TACDIR; // configure for edge time mode, count up
+    WTIMER0_CTL_R = TIMER_CTL_TAEVENT_POS; // measure time from positive edge to positive edge
+    WTIMER0_TAV_R = 0;                          // zero counter for first period
 
-     C0+ 14 Analog Analog comparator 0 positive input.
-     C0- 13 Analog Analog comparator 0 negative input.
-     */
-    selectPinDigitalInput(PORTE, 13);
-    selectPinDigitalInput(PORTE, 14);
-
-    /*
-     4.
-     Configure the PMCn fields in the GPIOPCTL register to assign the analog comparator output
-     signals to the appropriate pins (see page 688 and Table 23-5 on page 1351).
-     */
-
-    // N/A since we want to output it to the Uart0 ?????
+    //1: enable clocks
+    SYSCTL_RCGCACMP_R |= 1;
     /*
      5. Configure the internal voltage reference to 1.65 V by writing the ACREFCTL register with the
      value 0x0000.030C.
 
      */
-    COMP_ACREFCTL_R |= 0xF; //2.469 is the highest we want
+    COMP_ACREFCTL_R |= 0xF | (1 << 9) | (0 << 8); //(0<<8) RNG=0, (1<<9) = EN, 0xF = 2.469
+    COMP_ACCTL0_R |= (2 << 9) | (1 << 1); //ASRCP && (1<<1) CINV we want to invert
+
+    waitMicrosecond(10);
+
 }
 
