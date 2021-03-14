@@ -8,7 +8,7 @@ system architectures, memory interfacing, asynchronous and synchronous serial in
 peripherals, analog to digital (A/D) and digital to analog (D/A) converters, and typical applications..
 Prerequisites: CSE 2100 or 1205, CSE 2312, CSE 2440, and CSE 2441.</p>
 
-<h1> Student Learning Outcomes:<h1/>
+# Student Learning Outcomes:
 Upon successful completion of this course, students will have knowledge of:
 - Proficiency in C programming
 - Differences between Harvard and von Neuman architectures
