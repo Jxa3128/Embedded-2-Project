@@ -1,6 +1,8 @@
 # _*Embedded-2-Project*_
 *This course was taken with Jason Losh in Spring 2021*
-<h1> *Course Content* </h1>
+
+
+<h1> Course Content</h1>
 <p> Design of microcontroller-based systems, including microprocessor programming, component and
 system architectures, memory interfacing, asynchronous and synchronous serial interfaces, timer-based
 peripherals, analog to digital (A/D) and digital to analog (D/A) converters, and typical applications..
