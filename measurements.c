@@ -52,7 +52,7 @@ void initMeasure()
 
     //1: enable clocks
     SYSCTL_RCGCACMP_R |= 1;
-    /*
+    /* (starts on page 1220)
      5. Configure the internal voltage reference to 1.65 V by writing the ACREFCTL register with the
      value 0x0000.030C.
 
@@ -60,6 +60,7 @@ void initMeasure()
     COMP_ACREFCTL_R |= 0xF | (1 << 9) | (0 << 8); //(0<<8) RNG=0, (1<<9) = EN, 0xF = 2.469
     COMP_ACCTL0_R |= (2 << 9) | (1 << 1); //ASRCP && (1<<1) CINV we want to invert
 
+    //wait 10us
     waitMicrosecond(10);
 
 }
@@ -71,25 +72,30 @@ uint32_t measureResistance()
     setPinValue(INTEGRATE, 1);
     setPinValue(LOWSIDE, 1); //discharge //ground both sides of capacitor
     waitMicrosecond(10e3); //wait a reasonable time
+
+    //disable timer
     WTIMER0_CTL_R &= ~TIMER_CTL_TAEN;
-    //reset timer
+
+    //reset timer TAV and TBV
     WTIMER0_TAV_R = 0;
     WTIMER0_TBV_R = 0;
 
+    //initiate measure for resistance
     setPinValue(LOWSIDE, 0);
     setPinValue(MEASURE_LR, 1);
 
     //turn on timer
     WTIMER0_CTL_R |= TIMER_CTL_TAEN;
 
-    //stay blocking when it is not tripped
-    while (!1);
+    //stay blocking when it is not tripped - same thing as & with 2
+    while (COMP_ACSTAT0_R & (1<<1)); //this is in page 1226, status register
+
     //make sure it is not counting
     WTIMER0_CTL_R &= ~TIMER_CTL_TAEN;
 
-
-    //do some math and divide to get accurate resistance
+    //disable pins once more before returning
     disablePins();
+    //do some math and divide to get accurate resistance and then return value
     return WTIMER0_TAV_R / 1;
 }
 
