@@ -83,10 +83,7 @@ uint32_t measureResistance()
     WTIMER0_CTL_R |= TIMER_CTL_TAEN;
 
     //stay blocking when it is not tripped
-    while (!1)
-    {
-
-    }
+    while (!1);
     //make sure it is not counting
     WTIMER0_CTL_R &= ~TIMER_CTL_TAEN;
     ]
@@ -98,6 +95,12 @@ uint32_t measureResistance()
 
 void disablePins()
 {
+    setPinValue(LOWSIDE, 0);
+    setPinValue(MEASURE_LR, 0);
+    setPinValue(MEASURE_C, 0);
+    setPinValue(ADC, 0);
+    setPinValue(INTEGRATE, 0);
+    setPinValue(HIGHSIDE, 0);
 
 }
 
