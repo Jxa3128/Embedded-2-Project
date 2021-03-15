@@ -1,5 +1,8 @@
 //Jorge Avila
-//test resistance
+//mavID: 1001543128
+//Spring 2021 Embedded 2 basic multimeter project
+
+//header files
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -22,14 +25,21 @@ void initHw()
 
 int main(void)
 {
+    //initializations of hardware,Peripheral, etc
     initHw();
     initMeasure();
     initUart0();
     setUart0BaudRate(115200, 40e6);
-    putsUart0("Welcome to testing the board!\n\r");
-    USER_DATA data;
 
+
+    //putsUart0("Welcome to testing the board!\n\r");
+    putsUart0("Welcome to Embedded 2 Project!\n");
+    putsUart0("What would your dusty ass like to measure today?\n");
+
+    USER_DATA data;
     bool valid = false;
+
+    //where all of our options be
     while (true)
     {
         putsUart0("\nJorge's-CLI$>> ");
