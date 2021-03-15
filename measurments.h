@@ -13,6 +13,6 @@
 void initMeasure();
 uint32_t measureResistance();
 void disablePins();
-
+void testBoard();
 
 #endif /* MEASURMENTS_H_ */

@@ -20,12 +20,19 @@
 #define HIGHSIDE PORTA,3 //PA3
 #define LOWSIDE PORTA,7 //PA7
 
+#define BLUE_LED PORTF,2
+
 void initMeasure()
 {
     // Enable clocks
     enablePort(PORTA);
     enablePort(PORTE);
+    enablePort(PORTC);
     _delay_cycles(3);
+
+    //turn blue LED on
+    enablePort(PORTF);
+    selectPinPushPullOutput(BLUE_LED);
 
     //select left side
     selectPinPushPullOutput(MEASURE_LR); //pa2
@@ -36,8 +43,11 @@ void initMeasure()
     selectPinPushPullOutput(HIGHSIDE);
     selectPinPushPullOutput(LOWSIDE);
 
+    //initalizing the ADC will go here - PE4
+    selectPinAnalogInput(ADC);
+
     //now we have to initialize the Analog Comparator
-    selectPinAnalogInput(AC); //pe4 - AFSEL_R,DEN_R and AMSEL_R
+    selectPinAnalogInput(AC); //PC7 - AFSEL_R,DEN_R and AMSEL_R
 
     //enable a "narrow"/wide timer but it has to be 32-bit
     // TIMER Configure
@@ -88,7 +98,8 @@ uint32_t measureResistance()
     WTIMER0_CTL_R |= TIMER_CTL_TAEN;
 
     //stay blocking when it is not tripped - same thing as & with 2
-    while (COMP_ACSTAT0_R & (1<<1)); //this is in page 1226, status register
+    while (COMP_ACSTAT0_R & (1 << 1))
+        ; //this is in page 1226, status register
 
     //make sure it is not counting
     WTIMER0_CTL_R &= ~TIMER_CTL_TAEN;
@@ -101,12 +112,19 @@ uint32_t measureResistance()
 
 void disablePins()
 {
+    setPinValue(BLUE_LED, 0);
     setPinValue(LOWSIDE, 0);
     setPinValue(MEASURE_LR, 0);
     setPinValue(MEASURE_C, 0);
     setPinValue(ADC, 0);
     setPinValue(INTEGRATE, 0);
     setPinValue(HIGHSIDE, 0);
+}
+
+void testBoard()
+{
+
+    setPinValue(BLUE_LED, 1);
 
 }
 
