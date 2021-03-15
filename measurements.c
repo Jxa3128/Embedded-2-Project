@@ -100,8 +100,7 @@ uint32_t measureResistance()
     WTIMER0_CTL_R |= TIMER_CTL_TAEN;
 
     //stay blocking when it is not tripped - same thing as & with 2
-    while (COMP_ACSTAT0_R & (1 << 1))
-        ; //this is in page 1226, status register
+    while (!(COMP_ACSTAT0_R & (1 << 1))); //this is in page 1226, status register
 
     //make sure it is not counting
     WTIMER0_CTL_R &= ~TIMER_CTL_TAEN;
@@ -109,7 +108,7 @@ uint32_t measureResistance()
     //disable pins once more before returning
     disablePins();
     //do some math and divide to get accurate resistance and then return value
-    return WTIMER0_TAV_R / 1;
+    return (WTIMER0_TAV_R);
 }
 
 void disablePins()

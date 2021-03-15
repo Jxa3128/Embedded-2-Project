@@ -40,6 +40,7 @@ int main(void)
     //where all of our options be
     while (true)
     {
+        putsUart0("\n");
         putsUart0("\nJorge's-CLI$>> ");
         getsUart0(&data);
         putsUart0("\n");
@@ -55,7 +56,11 @@ int main(void)
             char *type = getFieldString(&data, 1);
             if (stringCompare(type, "resistance"))
             {
-                putsUart0("you said resistance?\n");
+                putsUart0("Measuring Resistance\n");
+                uint32_t res = measureResistance();
+                putsUart0("The value of the resistor is: ");
+                ATOI(res);
+                putcUart0('\n');
                 valid = true;
             }
             valid = true;

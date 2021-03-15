@@ -1,17 +1,17 @@
 ******************************************************************************
                   TI ARM Linker Unix v20.2.1                   
 ******************************************************************************
->> Linked Sun Mar 14 22:43:18 2021
+>> Linked Sun Mar 14 23:26:30 2021
 
 OUTPUT FILE NAME:   <Embedded2Project.out>
-ENTRY POINT SYMBOL: "_c_int00_noinit_noargs"  address: 00001649
+ENTRY POINT SYMBOL: "_c_int00_noinit_noargs"  address: 00001689
 
 
 MEMORY CONFIGURATION
 
          name            origin    length      used     unused   attr    fill
 ----------------------  --------  ---------  --------  --------  ----  --------
-  FLASH                 00000000   00040000  000016bc  0003e944  R  X
+  FLASH                 00000000   00040000  000016fc  0003e904  R  X
   SRAM                  20000000   00008000  00000200  00007e00  RW X
 
 
@@ -19,9 +19,9 @@ SEGMENT ALLOCATION MAP
 
 run origin  load origin   length   init length attrs members
 ----------  ----------- ---------- ----------- ----- -------
-00000000    00000000    000016bc   000016bc    r-x
+00000000    00000000    000016fc   000016fc    r-x
   00000000    00000000    0000026c   0000026c    r-- .intvecs
-  0000026c    0000026c    00001450   00001450    r-x .text
+  0000026c    0000026c    00001490   00001490    r-x .text
 20000000    20000000    00000200   00000000    rw-
   20000000    20000000    00000200   00000000    rw- .stack
 
@@ -34,19 +34,19 @@ section   page    origin      length       input sections
 .intvecs   0    00000000    0000026c     
                   00000000    0000026c     tm4c123gh6pm_startup_ccs.obj (.intvecs)
 
-.text      0    0000026c    00001450     
+.text      0    0000026c    00001490     
                   0000026c    000007c0     gpio.obj (.text)
                   00000a2c    0000059c     uart0.obj (.text)
                   00000fc8    00000424     measurements.obj (.text)
-                  000013ec    000001e0     main.obj (.text)
-                  000015cc    0000007a     rtsv7M4_T_le_v4SPD16_eabi.lib : memset_t2.asm.obj (.text)
-                  00001646    00000002     --HOLE-- [fill = 0]
-                  00001648    0000002c                                   : boot_cortex_m.c.obj (.text:_c_int00_noinit_noargs:_c_int00_noinit_noargs)
-                  00001674    00000024     wait.obj (.text)
-                  00001698    00000010     clock.obj (.text)
-                  000016a8    0000000c     tm4c123gh6pm_startup_ccs.obj (.text)
-                  000016b4    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : pre_init.c.obj (.text:_system_pre_init)
-                  000016b8    00000004                                   : exit.c.obj (.text:abort:abort)
+                  000013ec    00000220     main.obj (.text)
+                  0000160c    0000007a     rtsv7M4_T_le_v4SPD16_eabi.lib : memset_t2.asm.obj (.text)
+                  00001686    00000002     --HOLE-- [fill = 0]
+                  00001688    0000002c                                   : boot_cortex_m.c.obj (.text:_c_int00_noinit_noargs:_c_int00_noinit_noargs)
+                  000016b4    00000024     wait.obj (.text)
+                  000016d8    00000010     clock.obj (.text)
+                  000016e8    0000000c     tm4c123gh6pm_startup_ccs.obj (.text)
+                  000016f4    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : pre_init.c.obj (.text:_system_pre_init)
+                  000016f8    00000004                                   : exit.c.obj (.text:abort:abort)
 
 .cinit     0    00000000    00000000     UNINITIALIZED
 
@@ -69,11 +69,11 @@ MODULE SUMMARY
        uart0.obj                      1436   0         0      
        measurements.obj               1060   0         0      
        tm4c123gh6pm_startup_ccs.obj   12     620       0      
-       main.obj                       480    0         0      
+       main.obj                       544    0         0      
        wait.obj                       36     0         0      
        clock.obj                      16     0         0      
     +--+------------------------------+------+---------+---------+
-       Total:                         5024   620       0      
+       Total:                         5088   620       0      
                                                               
     /Applications/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/lib/rtsv7M4_T_le_v4SPD16_eabi.lib
        memset_t2.asm.obj              122    0         0      
@@ -85,7 +85,7 @@ MODULE SUMMARY
                                                               
        Stack:                         0      0         512    
     +--+------------------------------+------+---------+---------+
-       Grand Total:                   5198   620       512    
+       Grand Total:                   5262   620       512    
 
 
 GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
@@ -93,8 +93,8 @@ GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name
 address   name                         
 -------   ----                         
 00000f1d  ATOI                         
-000016b9  C$$EXIT                      
-000016a9  ResetISR                     
+000016f9  C$$EXIT                      
+000016e9  ResetISR                     
 20000200  __STACK_END                  
 00000200  __STACK_SIZE                 
 20000200  __STACK_TOP                  
@@ -102,21 +102,21 @@ ffffffff  __TI_pprof_out_hndl
 ffffffff  __TI_prof_data_size          
 ffffffff  __TI_prof_data_start         
 00000000  __TI_static_base__           
-000015cd  __aeabi_memclr               
-000015cd  __aeabi_memclr4              
-000015cd  __aeabi_memclr8              
-000015cf  __aeabi_memset               
-000015cf  __aeabi_memset4              
-000015cf  __aeabi_memset8              
+0000160d  __aeabi_memclr               
+0000160d  __aeabi_memclr4              
+0000160d  __aeabi_memclr8              
+0000160f  __aeabi_memset               
+0000160f  __aeabi_memset4              
+0000160f  __aeabi_memset8              
 ffffffff  __binit__                    
 ffffffff  __c_args__                   
 UNDEFED   __mpu_init                   
 20000000  __stack                      
 20000000  __start___llvm_prf_cnts      
 20000000  __stop___llvm_prf_cnts       
-00001649  _c_int00_noinit_noargs       
-000016b5  _system_pre_init             
-000016b9  abort                        
+00001689  _c_int00_noinit_noargs       
+000016f5  _system_pre_init             
+000016f9  abort                        
 ffffffff  binit                        
 0000089d  disablePinInterrupt          
 000005d5  disablePinPulldown           
@@ -136,13 +136,13 @@ ffffffff  binit
 00000b3d  getsUart0                    
 000013ed  initHw                       
 00000fc9  initMeasure                  
-00001699  initSystemClockTo40Mhz       
+000016d9  initSystemClockTo40Mhz       
 00000a2d  initUart0                    
 00000e2b  isCommand                    
 00000f03  kbhitUart0                   
 000013f5  main                         
 0000108d  measureResistance            
-000015d5  memset                       
+00001615  memset                       
 00000e57  myCompare                    
 00000bc3  parseFields                  
 00000ae1  putcUart0                    
@@ -163,7 +163,7 @@ ffffffff  binit
 00000ab5  setUart0BaudRate             
 00000ea7  stringCompare                
 00001149  testBoard                    
-00001675  waitMicrosecond              
+000016b5  waitMicrosecond              
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
@@ -216,20 +216,20 @@ address   name
 00001149  testBoard                    
 000013ed  initHw                       
 000013f5  main                         
-000015cd  __aeabi_memclr               
-000015cd  __aeabi_memclr4              
-000015cd  __aeabi_memclr8              
-000015cf  __aeabi_memset               
-000015cf  __aeabi_memset4              
-000015cf  __aeabi_memset8              
-000015d5  memset                       
-00001649  _c_int00_noinit_noargs       
-00001675  waitMicrosecond              
-00001699  initSystemClockTo40Mhz       
-000016a9  ResetISR                     
-000016b5  _system_pre_init             
-000016b9  C$$EXIT                      
-000016b9  abort                        
+0000160d  __aeabi_memclr               
+0000160d  __aeabi_memclr4              
+0000160d  __aeabi_memclr8              
+0000160f  __aeabi_memset               
+0000160f  __aeabi_memset4              
+0000160f  __aeabi_memset8              
+00001615  memset                       
+00001689  _c_int00_noinit_noargs       
+000016b5  waitMicrosecond              
+000016d9  initSystemClockTo40Mhz       
+000016e9  ResetISR                     
+000016f5  _system_pre_init             
+000016f9  C$$EXIT                      
+000016f9  abort                        
 20000000  __stack                      
 20000000  __start___llvm_prf_cnts      
 20000000  __stop___llvm_prf_cnts       
