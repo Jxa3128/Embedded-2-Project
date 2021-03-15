@@ -21,6 +21,7 @@
 #define LOWSIDE PORTA,7 //PA7
 
 #define BLUE_LED PORTF,2
+#define RED_LED PORTF,1
 
 void initMeasure()
 {
@@ -33,6 +34,7 @@ void initMeasure()
     //turn blue LED on
     enablePort(PORTF);
     selectPinPushPullOutput(BLUE_LED);
+    selectPinPushPullOutput(RED_LED);
 
     //select left side
     selectPinPushPullOutput(MEASURE_LR); //pa2
@@ -113,18 +115,113 @@ uint32_t measureResistance()
 void disablePins()
 {
     setPinValue(BLUE_LED, 0);
+    setPinValue(RED_LED, 0);
     setPinValue(LOWSIDE, 0);
     setPinValue(MEASURE_LR, 0);
     setPinValue(MEASURE_C, 0);
-    setPinValue(ADC, 0);
+//    setPinValue(ADC, 0);
+//    setPinValue(AC, 0);
     setPinValue(INTEGRATE, 0);
     setPinValue(HIGHSIDE, 0);
 }
 
 void testBoard()
 {
+    //RIGHT SIDE
 
+    //MEASURE_LR =0, MEASURE_C = 0
     setPinValue(BLUE_LED, 1);
+
+    setPinValue(MEASURE_LR, 0);
+    setPinValue(MEASURE_C, 0);
+    waitMicrosecond(1e6);
+    //expected output = floating (.9V~1.1V)
+    setPinValue(BLUE_LED, 0);
+    setPinValue(RED_LED, 1);
+    waitMicrosecond(1e6);
+    disablePins();
+
+    //MEASURE_LR =1, MEASURE_C = 0, DUT1 ~ 3.2+V (logical high)
+    setPinValue(BLUE_LED, 1);
+    setPinValue(MEASURE_LR, 1);
+    setPinValue(MEASURE_C, 0);
+    waitMicrosecond(1e6);
+    setPinValue(BLUE_LED, 0);
+    setPinValue(RED_LED, 1);
+    disablePins();
+    waitMicrosecond(1e6);
+
+    //MEASURE_LR =0, MEASURE_C = 1, output ~ .02V (logical low)
+    setPinValue(BLUE_LED, 1);
+    setPinValue(MEASURE_LR, 0);
+    setPinValue(MEASURE_C, 1);
+    waitMicrosecond(1e6);
+    setPinValue(BLUE_LED, 0);
+    setPinValue(RED_LED, 1);
+    disablePins();
+    waitMicrosecond(1e6);
+
+    //RIGHT SIDE BOARD
+
+    //Highside = 0, Lowside = 0, Integrate=0, output = floating (.9V~1.1V)
+    setPinValue(BLUE_LED, 1);
+    setPinValue(LOWSIDE, 0);
+    setPinValue(HIGHSIDE, 0);
+    setPinValue(INTEGRATE, 0);
+    waitMicrosecond(1e6);
+    setPinValue(BLUE_LED, 0);
+    setPinValue(RED_LED, 1);
+    disablePins();
+    waitMicrosecond(1e6);
+
+    //Highside = 1, Lowside = 0, Integrate=0, output ~3V-3.15V
+    setPinValue(BLUE_LED, 1);
+    setPinValue(LOWSIDE, 0);
+    setPinValue(HIGHSIDE, 1);
+    setPinValue(INTEGRATE, 0);
+    waitMicrosecond(1e6);
+    setPinValue(BLUE_LED, 0);
+    setPinValue(RED_LED, 1);
+    disablePins();
+    waitMicrosecond(1e6);
+
+    //Highside = 0, Lowside = 1, Integrate=0, output (.2V) logical low
+    setPinValue(BLUE_LED, 1);
+    setPinValue(LOWSIDE, 1);
+    setPinValue(HIGHSIDE, 0);
+    setPinValue(INTEGRATE, 0);
+    waitMicrosecond(1e6);
+    setPinValue(BLUE_LED, 0);
+    setPinValue(RED_LED, 1);
+    disablePins();
+    waitMicrosecond(1e6);
+
+    //Highside = 1, Lowside = 1, Integrate=0, output = (.15-.25V)
+    setPinValue(BLUE_LED, 1);
+    setPinValue(LOWSIDE, 1);
+    setPinValue(HIGHSIDE, 1);
+    setPinValue(INTEGRATE, 0);
+    waitMicrosecond(1e6);
+    setPinValue(BLUE_LED, 0);
+    setPinValue(RED_LED, 1);
+    disablePins();
+    waitMicrosecond(1e6);
+
+    //Highside = 1, Lowside = 0, Integrate=1, output = (3-3.15V)
+    setPinValue(BLUE_LED, 1);
+    setPinValue(LOWSIDE, 0);
+    setPinValue(HIGHSIDE, 1);
+    setPinValue(INTEGRATE, 1);
+    waitMicrosecond(1e6);
+    setPinValue(BLUE_LED, 0);
+    setPinValue(RED_LED, 1);
+    disablePins();
+    waitMicrosecond(1e6);
+
+    //dump the capacitor
+    setPinValue(INTEGRATE, 1);
+    setPinValue(LOWSIDE, 1); //discharge //ground both sides of capacitor
+    waitMicrosecond(10e3); //wait a reasonable time
 
 }
 

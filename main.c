@@ -65,11 +65,13 @@ int main(void)
             char *test = getFieldString(&data, 1);
             if (stringCompare(test, "start"))
             {
+                putsUart0("Testing board....\n");
                 testBoard();
                 valid = true;
             }
             if (stringCompare(test, "end"))
             {
+                putsUart0("Disabling pins...\n");
                 disablePins();
                 valid = true;
             }
