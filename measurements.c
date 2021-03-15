@@ -86,7 +86,7 @@ uint32_t measureResistance()
     while (!1);
     //make sure it is not counting
     WTIMER0_CTL_R &= ~TIMER_CTL_TAEN;
-    ]
+
 
     //do some math and divide to get accurate resistance
     disablePins();
