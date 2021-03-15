@@ -242,3 +242,27 @@ bool kbhitUart0()
 {
     return !(UART0_FR_R & UART_FR_RXFE);
 }
+void ATOI(uint8_t num)
+{
+    uint8_t countValue = num;
+    uint8_t digits = 0;
+    while (countValue > 0)
+    {
+        countValue /= 10;
+        digits++;
+    }
+    if (digits == 0)
+    {
+        putcUart0('0');
+    }
+    else
+    {
+        char ans[4] = "\0\0\0\0";
+        for (digits = digits; digits > 0; digits--)
+        {
+            ans[digits - 1] = (num % 10) + '0';
+            num /= 10;
+        }
+        putsUart0(ans);
+    }
+}

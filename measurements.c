@@ -76,7 +76,7 @@ uint32_t measureResistance()
     //disable timer
     WTIMER0_CTL_R &= ~TIMER_CTL_TAEN;
 
-    //reset timer TAV and TBV
+    //reset timer register TAV and TBV
     WTIMER0_TAV_R = 0;
     WTIMER0_TBV_R = 0;
 
