@@ -23,6 +23,7 @@ void initHw()
 }
 
 int main(void)
+
 {
     //initializations of hardware,Peripheral, etc
     initHw();
@@ -46,23 +47,19 @@ int main(void)
         putsUart0("\n");
         parseFields(&data);
 
-        if (isCommand(&data, "RESOFF", 0))
-        {
-            valid = true;
-        }
         //measuring block of code
-        if (isCommand(&data, "measure", 1))
+        if (isCommand(&data, "resistor", 0))
         {
-            char *type = getFieldString(&data, 1);
-            if (stringCompare(type, "resistance"))
-            {
-                putsUart0("Measuring Resistance\n");
-                uint32_t res = measureResistance();
-                putsUart0("The value of the resistor is: ");
-                ATOI(res);
-                putcUart0('\n');
-                valid = true;
-            }
+            //char *type = getFieldString(&data, 1);
+
+            putsUart0("Measuring Resistance\n");
+            uint32_t res = measureResistance();
+            putsUart0("The value of the resistor is: ");
+            //ATOI(res);
+            char res_str[300];
+            sprintf(res_str, "%d", res);
+            putsUart0(res_str);
+
             valid = true;
         }
         if (isCommand(&data, "test", 1))
@@ -79,6 +76,14 @@ int main(void)
                 putsUart0("Disabling pins...\n");
                 disablePins();
                 valid = true;
+            }
+        }
+        if (isCommand(&data, "clear", 0))
+        {
+            uint32_t i;
+            for (i = 0; i < 15; i++)
+            {
+                putcUart0('\n');
             }
         }
         if (!valid)

@@ -23,6 +23,8 @@
 #define BLUE_LED PORTF,2
 #define RED_LED PORTF,1
 
+#define CONST_RES 57
+
 void initMeasure()
 {
     // Enable clocks
@@ -69,6 +71,7 @@ void initMeasure()
      value 0x0000.030C.
 
      */
+    //look at line 6621 in header file for specific names
     COMP_ACREFCTL_R |= 0xF | (1 << 9) | (0 << 8); //(0<<8) RNG=0, (1<<9) = EN, 0xF = 2.469
     COMP_ACCTL0_R |= (2 << 9) | (1 << 1); //ASRCP && (1<<1) CINV we want to invert
 
@@ -83,7 +86,7 @@ uint32_t measureResistance()
     disablePins();
     setPinValue(INTEGRATE, 1);
     setPinValue(LOWSIDE, 1); //discharge //ground both sides of capacitor
-    waitMicrosecond(10e3); //wait a reasonable time
+    waitMicrosecond(10e5); //wait a reasonable time
 
     //disable timer
     WTIMER0_CTL_R &= ~TIMER_CTL_TAEN;
@@ -100,7 +103,8 @@ uint32_t measureResistance()
     WTIMER0_CTL_R |= TIMER_CTL_TAEN;
 
     //stay blocking when it is not tripped - same thing as & with 2
-    while (!(COMP_ACSTAT0_R & (1 << 1))); //this is in page 1226, status register
+    while (!(COMP_ACSTAT0_R & (1 << 1)))
+        ; //this is in page 1226, status register
 
     //make sure it is not counting
     WTIMER0_CTL_R &= ~TIMER_CTL_TAEN;
@@ -108,13 +112,15 @@ uint32_t measureResistance()
     //disable pins once more before returning
     disablePins();
     //do some math and divide to get accurate resistance and then return value
-    return (WTIMER0_TAV_R);
+    //uint32_t k = WTIMER0_TAV_R/CONST_RES;
+    return (WTIMER0_TAV_R/CONST_RES);
 }
 
 void disablePins()
 {
     setPinValue(BLUE_LED, 0);
     setPinValue(RED_LED, 0);
+
     setPinValue(LOWSIDE, 0);
     setPinValue(MEASURE_LR, 0);
     setPinValue(MEASURE_C, 0);
