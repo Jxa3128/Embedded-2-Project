@@ -14,6 +14,7 @@ main.obj: /Applications/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/incl
 main.obj: /Applications/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/sys/stdint.h
 main.obj: /Applications/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/machine/_stdint.h
 main.obj: /Applications/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/sys/_stdint.h
+main.obj: /Applications/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/string.h
 main.obj: ../measurments.h
 main.obj: ../tm4c123gh6pm.h
 main.obj: ../clock.h
@@ -36,6 +37,7 @@ main.obj: ../uart0.h
 /Applications/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/sys/stdint.h: 
 /Applications/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/machine/_stdint.h: 
 /Applications/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/sys/_stdint.h: 
+/Applications/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/string.h: 
 ../measurments.h: 
 ../tm4c123gh6pm.h: 
 ../clock.h: 

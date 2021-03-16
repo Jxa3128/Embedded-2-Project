@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 #include "measurments.h"
 #include "clock.h"
 #include "gpio.h"
@@ -81,10 +82,11 @@ int main(void)
         if (isCommand(&data, "clear", 0))
         {
             uint32_t i;
-            for (i = 0; i < 15; i++)
+            for (i = 0; i < 20; i++)
             {
                 putcUart0('\n');
             }
+            valid = true;
         }
         if (!valid)
         {

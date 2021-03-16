@@ -114,6 +114,7 @@ uint32_t measureResistance()
     //do some math and divide to get accurate resistance and then return value
     //uint32_t k = WTIMER0_TAV_R/CONST_RES;
     return (WTIMER0_TAV_R/CONST_RES);
+    //returns close resistance
 }
 
 void disablePins()
