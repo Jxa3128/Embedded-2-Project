@@ -25,6 +25,7 @@
 #define RED_LED PORTF,1
 
 #define CONST_RES 57
+#define CONST_CAP 100e3
 
 #define TEST_VALUE (2<<7)
 
@@ -83,6 +84,7 @@ void initMeasure()
 
 }
 
+// RESISTANCE ** RESISTANCE ** RESISTANCE
 uint32_t measureResistance()
 {
     //make function that disables all the pins
@@ -101,7 +103,6 @@ uint32_t measureResistance()
     //initiate measure for resistance
     setPinValue(LOWSIDE, 0);
     setPinValue(MEASURE_LR, 1);
-
     //turn on timer
     WTIMER0_CTL_R |= TIMER_CTL_TAEN;
 
@@ -125,8 +126,37 @@ uint32_t measureResistance()
 uint32_t measureCapacitance()
 {
     disablePins();
+    setPinValue(INTEGRATE, 1);
+    setPinValue(LOWSIDE, 1); //discharge //ground both sides of capacitor
+    waitMicrosecond(10e5); //wait a reasonable time
 
-    return TEST_VALUE;
+    //disable timer
+    WTIMER0_CTL_R &= ~TIMER_CTL_TAEN;
+
+    //reset timer register TAV and TBV
+    WTIMER0_TAV_R = 0;
+    WTIMER0_TBV_R = 0;
+
+    //dump the testing cap across DUT1 and DUT2
+    setPinValue(HIGHSIDE, 0);
+    setPinValue(MEASURE_C, 1);
+    //setPinValue(LOWSIDE, 1);
+    //initiate measuring for capacitance
+    waitMicrosecond(10e5);
+    setPinValue(LOWSIDE, 0);
+    setPinValue(HIGHSIDE, 1);
+
+    //stay blocking when it is not tripped - same thing as & with 2
+    while (!(COMP_ACSTAT0_R & (1 << 1)))
+        ; //this is in page 1226, status register
+
+    //make sure it is not counting
+    WTIMER0_CTL_R &= ~TIMER_CTL_TAEN;
+
+    //disable pins once more before returning
+    disablePins();
+
+    return (WTIMER0_TAV_R);
 }
 
 uint32_t measureInductance()

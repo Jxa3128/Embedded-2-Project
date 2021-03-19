@@ -71,9 +71,10 @@ int main(void)
             putsUart0("Measuring Capacitance...\n");
             uint32_t cap = measureCapacitance();
             putsUart0("The value of the capacitor is: ");
-            char cap_str[300];
+            char cap_str[500];
             sprintf(cap_str, "%d farads\n", cap);
             putsUart0(cap_str);
+            valid = true
         }
         if (isCommand(&data, "inductance", 0))
         {
@@ -83,6 +84,7 @@ int main(void)
             char induct_str[300];
             sprintf(induct_str, "%d henries\n", induct);
             putsUart0(induct_str);
+            valid = true;
         }
         if (isCommand(&data, "test", 1))
         {
