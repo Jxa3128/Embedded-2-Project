@@ -16,6 +16,7 @@ measurements.obj: /Applications/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.
 measurements.obj: ../gpio.h
 measurements.obj: /Applications/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/stdbool.h
 measurements.obj: ../wait.h
+measurements.obj: ../uart0.h
 
 ../measurements.c: 
 ../measurments.h: 
@@ -33,3 +34,4 @@ measurements.obj: ../wait.h
 ../gpio.h: 
 /Applications/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/stdbool.h: 
 ../wait.h: 
+../uart0.h: 

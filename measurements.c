@@ -7,6 +7,7 @@
 #include "measurments.h"
 #include "gpio.h"
 #include "wait.h"
+#include "uart0.h"
 
 //define
 //left side of the board
@@ -113,7 +114,7 @@ uint32_t measureResistance()
     disablePins();
     //do some math and divide to get accurate resistance and then return value
     //uint32_t k = WTIMER0_TAV_R/CONST_RES;
-    return (WTIMER0_TAV_R/CONST_RES);
+    return (WTIMER0_TAV_R / CONST_RES);
     //returns close resistance
 }
 
@@ -129,6 +130,12 @@ void disablePins()
 //    setPinValue(AC, 0);
     setPinValue(INTEGRATE, 0);
     setPinValue(HIGHSIDE, 0);
+}
+
+void reIniciar()
+{
+    NVIC_APINT_R |= NVIC_APINT_VECTKEY | NVIC_APINT_SYSRESETREQ;
+    putsUart0("TM4C123 has been reset!\n");
 }
 
 void testBoard()

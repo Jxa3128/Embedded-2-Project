@@ -15,7 +15,7 @@
 #include "tm4c123gh6pm.h"
 #include "uart0.h"
 
-//increase the stack to 4096 for sprintf()
+//increase the stack to 4096 for sprintf() in the linker
 void initHw()
 {
     // Initialize system clock to 40 MHz
@@ -48,6 +48,12 @@ int main(void)
         putsUart0("\n");
         parseFields(&data);
 
+        if (isCommand(&data, "reset", 0))
+        {
+            putsUart0("Rebooting the TM4C213...\n");
+            reIniciar();
+            valid = true;
+        }
         //measuring block of code
         if (isCommand(&data, "resistor", 0))
         {
