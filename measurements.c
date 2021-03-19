@@ -129,6 +129,12 @@ uint32_t measureCapacitance()
     return TEST_VALUE;
 }
 
+uint32_t measureInductance()
+{
+    disablePins();
+
+    return TEST_VALUE;
+}
 void disablePins()
 {
     setPinValue(BLUE_LED, 0);

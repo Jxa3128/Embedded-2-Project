@@ -16,5 +16,5 @@ void disablePins();
 void testBoard();
 void reIniciar();
 uint32_t measureCapacitance();
-
+uint32_t measureInductance();
 #endif /* MEASURMENTS_H_ */

@@ -15,7 +15,6 @@
 #include "tm4c123gh6pm.h"
 #include "uart0.h"
 
-
 //prototypes
 void initHw();
 void help();
@@ -31,15 +30,16 @@ int main(void)
 
     USER_DATA data;
     //putsUart0("Welcome to testing the board!\n\r");
-    putsUart0("Welcome to Embedded 2 Project!\n");
-    putsUart0("What would your dusty ass like to measure today?\n");
+    putsUart0("\nWelcome to Embedded 2 Project!\n");
+    putsUart0("This is a Low-Cost Impedance Meter.\n");
+    putsUart0("Spring 2021 - Dr. Jason Losh at UT Arlington.\n");
 
     bool valid = false;
 
     //where all of our options be
     while (true)
     {
-        putsUart0("\n");
+        //putsUart0("\n");
         putsUart0("\nJorge's-CLI$>> ");
         getsUart0(&data);
         putsUart0("\n");
@@ -56,24 +56,33 @@ int main(void)
         {
             //char *type = getFieldString(&data, 1);
 
-            putsUart0("Measuring Resistance\n");
+            putsUart0("Measuring Resistance...\n");
             uint32_t res = measureResistance();
             putsUart0("The value of the resistor is: ");
             //ATOI(res);
             char res_str[300];
-            sprintf(res_str, "%d", res);
+            sprintf(res_str, "%d ohms\n", res);
             putsUart0(res_str);
 
             valid = true;
         }
         if (isCommand(&data, "cap", 0))
         {
-            putsUart0("Measuring Capacitance\n");
+            putsUart0("Measuring Capacitance...\n");
             uint32_t cap = measureCapacitance();
-            putsUart0("The value of the resistor is: ");
+            putsUart0("The value of the capacitor is: ");
             char cap_str[300];
-            sprintf(cap_str, "%d", cap);
+            sprintf(cap_str, "%d farads\n", cap);
             putsUart0(cap_str);
+        }
+        if (isCommand(&data, "inductance", 0))
+        {
+            putsUart0("Measuring Inductance...\n");
+            uint32_t induct = measureInductance();
+            putsUart0("The value of the capacitor is: ");
+            char induct_str[300];
+            sprintf(induct_str, "%d henries\n", induct);
+            putsUart0(induct_str);
         }
         if (isCommand(&data, "test", 1))
         {
@@ -100,6 +109,11 @@ int main(void)
             }
             valid = true;
         }
+        if(isCommand(&data, "help", 0))
+        {
+            help();
+            valid = true;
+        }
         if (!valid)
         {
             putsUart0("unknown command..\n");
@@ -119,6 +133,12 @@ void initHw()
 
 void help()
 {
+    putsUart0("\nYou may use the following commands:\n");
+    putsUart0("\r\t- type <resistor>, returns the resistance in (ohms).\n");
+    putsUart0("\r\t- type <capacitance>, returns the capacitance in (farads).\n");
+    putsUart0("\r\t- type <inductance>, returns the inductance in (henries).\n");
 
+    putsUart0("\r\t- type <clear>, clears the screen.\n");
+    putsUart0("\r\t- type <reset>, resets the hardware.\n");
 }
 
