@@ -74,7 +74,7 @@ int main(void)
             char cap_str[500];
             sprintf(cap_str, "%d farads\n", cap);
             putsUart0(cap_str);
-            valid = true
+            valid = true;
         }
         if (isCommand(&data, "inductance", 0))
         {

@@ -8,6 +8,7 @@
 #include "gpio.h"
 #include "wait.h"
 #include "uart0.h"
+#include "tm4c123gh6pm.h"
 
 //define
 //left side of the board
@@ -57,6 +58,9 @@ void initMeasure()
     //now we have to initialize the Analog Comparator
     selectPinAnalogInput(AC); //PC7 - AFSEL_R,DEN_R and AMSEL_R
 
+    /*
+     * TIMER0 --> resistance
+     */
     //enable a "narrow"/wide timer but it has to be 32-bit
     // TIMER Configure
     SYSCTL_RCGCWTIMER_R |= SYSCTL_RCGCWTIMER_R0;                // turn-on timer
@@ -67,6 +71,7 @@ void initMeasure()
 
     WTIMER0_TAV_R = 0;                          // zero counter for first period
     WTIMER0_TBV_R = 0;
+
 
     //1: enable clocks
     SYSCTL_RCGCACMP_R |= 1;
@@ -140,7 +145,7 @@ uint32_t measureCapacitance()
     //dump the testing cap across DUT1 and DUT2
     setPinValue(HIGHSIDE, 0);
     setPinValue(MEASURE_C, 1);
-    //setPinValue(LOWSIDE, 1);
+    setPinValue(LOWSIDE, 1);
     //initiate measuring for capacitance
     waitMicrosecond(10e5);
     setPinValue(LOWSIDE, 0);
@@ -181,7 +186,7 @@ void disablePins()
 
 void reIniciar()
 {
-    NVIC_APINT_R |= NVIC_APINT_VECTKEY | NVIC_APINT_SYSRESETREQ;
+    NVIC_APINT_R = NVIC_APINT_VECTKEY | NVIC_APINT_VECT_RESET;
     putsUart0("TM4C123 has been reset!\n");
 }
 
