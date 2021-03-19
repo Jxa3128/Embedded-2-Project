@@ -15,13 +15,10 @@
 #include "tm4c123gh6pm.h"
 #include "uart0.h"
 
-//increase the stack to 4096 for sprintf() in the linker
-void initHw()
-{
-    // Initialize system clock to 40 MHz
-    initSystemClockTo40Mhz();
 
-}
+//prototypes
+void initHw();
+void help();
 
 int main(void)
 
@@ -69,6 +66,15 @@ int main(void)
 
             valid = true;
         }
+        if (isCommand(&data, "cap", 0))
+        {
+            putsUart0("Measuring Capacitance\n");
+            uint32_t cap = measureCapacitance();
+            putsUart0("The value of the resistor is: ");
+            char cap_str[300];
+            sprintf(cap_str, "%d", cap);
+            putsUart0(cap_str);
+        }
         if (isCommand(&data, "test", 1))
         {
             char *test = getFieldString(&data, 1);
@@ -101,5 +107,18 @@ int main(void)
     }
 
     //outside the while loop
+}
+
+//increase the stack to 4096 for sprintf() in the linker
+void initHw()
+{
+    // Initialize system clock to 40 MHz
+    initSystemClockTo40Mhz();
+
+}
+
+void help()
+{
+
 }
 

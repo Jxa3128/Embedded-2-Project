@@ -15,5 +15,6 @@ uint32_t measureResistance();
 void disablePins();
 void testBoard();
 void reIniciar();
+uint32_t measureCapacitance();
 
 #endif /* MEASURMENTS_H_ */

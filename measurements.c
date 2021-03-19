@@ -26,6 +26,8 @@
 
 #define CONST_RES 57
 
+#define TEST_VALUE (2<<7)
+
 void initMeasure()
 {
     // Enable clocks
@@ -116,6 +118,15 @@ uint32_t measureResistance()
     //uint32_t k = WTIMER0_TAV_R/CONST_RES;
     return (WTIMER0_TAV_R / CONST_RES);
     //returns close resistance
+}
+
+//measure capacitance
+
+uint32_t measureCapacitance()
+{
+    disablePins();
+
+    return TEST_VALUE;
 }
 
 void disablePins()
