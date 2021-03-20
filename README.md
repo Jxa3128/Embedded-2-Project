@@ -22,4 +22,4 @@ architectures
 - Digital filtering applications
 - Real-time control applications
 
-Course link *http://ranger.uta.edu/~jlosh/CSE3442/index.html*
+Course link *http://ranger.uta.edu/~jlosh/CSE4342/index.html*
