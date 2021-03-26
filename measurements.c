@@ -131,7 +131,6 @@ uint32_t measureResistance()
 uint32_t measureCapacitance()
 {
     disablePins();
-    setPinValue(INTEGRATE, 1);
     setPinValue(LOWSIDE, 1); //discharge //ground both sides of capacitor
     waitMicrosecond(10e5); //wait a reasonable time
 
@@ -142,12 +141,12 @@ uint32_t measureCapacitance()
     WTIMER0_TAV_R = 0;
     WTIMER0_TBV_R = 0;
 
-    //dump the testing cap across DUT1 and DUT2
-    setPinValue(HIGHSIDE, 0);
+    WTIMER0_CTL_R |= TIMER_CTL_TAEN;
+
     setPinValue(MEASURE_C, 1);
-    setPinValue(LOWSIDE, 1);
+
     //initiate measuring for capacitance
-    waitMicrosecond(10e5);
+    //waitMicrosecond(10e5);
     setPinValue(LOWSIDE, 0);
     setPinValue(HIGHSIDE, 1);
 
@@ -155,9 +154,10 @@ uint32_t measureCapacitance()
     while (!(COMP_ACSTAT0_R & (1 << 1)))
         ; //this is in page 1226, status register
 
+    waitMicrosecond(10e6);
     //make sure it is not counting
     WTIMER0_CTL_R &= ~TIMER_CTL_TAEN;
-
+    uint32_t temp = WTIMER0_TAV_R;
     //disable pins once more before returning
     disablePins();
 
@@ -169,6 +169,14 @@ uint32_t measureInductance()
     disablePins();
 
     return TEST_VALUE;
+}
+double measureEsr()
+{
+    return (double)TEST_VALUE;
+}
+double measureAuto()
+{
+    return (double)TEST_VALUE;
 }
 void disablePins()
 {
@@ -184,10 +192,12 @@ void disablePins()
     setPinValue(HIGHSIDE, 0);
 }
 
+
 void reIniciar()
 {
-    NVIC_APINT_R = NVIC_APINT_VECTKEY | NVIC_APINT_VECT_RESET;
+    waitMicrosecond(10e4);
     putsUart0("TM4C123 has been reset!\n");
+    NVIC_APINT_R = NVIC_APINT_VECTKEY | NVIC_APINT_VECT_RESET;
 }
 
 void testBoard()
