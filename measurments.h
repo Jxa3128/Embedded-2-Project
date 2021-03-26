@@ -17,4 +17,7 @@ void testBoard();
 void reIniciar();
 uint32_t measureCapacitance();
 uint32_t measureInductance();
+double measureAuto();
+double measureEsr();
+
 #endif /* MEASURMENTS_H_ */

@@ -154,14 +154,15 @@ uint32_t measureCapacitance()
     while (!(COMP_ACSTAT0_R & (1 << 1)))
         ; //this is in page 1226, status register
 
-    waitMicrosecond(10e6);
+    //waitMicrosecond(10e6);
     //make sure it is not counting
     WTIMER0_CTL_R &= ~TIMER_CTL_TAEN;
     uint32_t temp = WTIMER0_TAV_R;
     //disable pins once more before returning
     disablePins();
 
-    return (WTIMER0_TAV_R);
+    //return (WTIMER0_TAV_R/CONST_CAP);
+    return (WTIMER0_TAV_R*.00000018);
 }
 
 uint32_t measureInductance()

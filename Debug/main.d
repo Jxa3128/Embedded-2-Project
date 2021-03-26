@@ -20,7 +20,6 @@ main.obj: ../tm4c123gh6pm.h
 main.obj: ../clock.h
 main.obj: ../gpio.h
 main.obj: /Applications/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/stdbool.h
-main.obj: /Applications/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/stdlib.h
 main.obj: ../uart0.h
 
 ../main.c: 
@@ -43,5 +42,4 @@ main.obj: ../uart0.h
 ../clock.h: 
 ../gpio.h: 
 /Applications/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/stdbool.h: 
-/Applications/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/stdlib.h: 
 ../uart0.h: 

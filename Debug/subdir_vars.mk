@@ -8,6 +8,7 @@ CMD_SRCS += \
 
 C_SRCS += \
 ../clock.c \
+../eeprom.c \
 ../gpio.c \
 ../main.c \
 ../measurements.c \
@@ -17,6 +18,7 @@ C_SRCS += \
 
 C_DEPS += \
 ./clock.d \
+./eeprom.d \
 ./gpio.d \
 ./main.d \
 ./measurements.d \
@@ -26,6 +28,7 @@ C_DEPS += \
 
 OBJS += \
 ./clock.obj \
+./eeprom.obj \
 ./gpio.obj \
 ./main.obj \
 ./measurements.obj \
@@ -35,6 +38,7 @@ OBJS += \
 
 OBJS__QUOTED += \
 "clock.obj" \
+"eeprom.obj" \
 "gpio.obj" \
 "main.obj" \
 "measurements.obj" \
@@ -44,6 +48,7 @@ OBJS__QUOTED += \
 
 C_DEPS__QUOTED += \
 "clock.d" \
+"eeprom.d" \
 "gpio.d" \
 "main.d" \
 "measurements.d" \
@@ -53,6 +58,7 @@ C_DEPS__QUOTED += \
 
 C_SRCS__QUOTED += \
 "../clock.c" \
+"../eeprom.c" \
 "../gpio.c" \
 "../main.c" \
 "../measurements.c" \

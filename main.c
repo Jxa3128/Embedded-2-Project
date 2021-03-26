@@ -10,8 +10,6 @@
 #include "measurments.h"
 #include "clock.h"
 #include "gpio.h"
-#include <stdio.h>
-#include <stdlib.h>
 #include "tm4c123gh6pm.h"
 #include "uart0.h"
 
@@ -58,7 +56,7 @@ int main(void)
 
             putsUart0("Measuring Resistance...\n");
             uint32_t res = measureResistance();
-            putsUart0("The value of the resistor is: ");
+            putsUart0("The value of the resistor is about ~: ");
             //ATOI(res);
             char res_str[300];
             sprintf(res_str, "%d ohms\n", res);
@@ -70,9 +68,9 @@ int main(void)
         {
             putsUart0("Measuring Capacitance...\n");
             uint32_t cap = measureCapacitance();
-            putsUart0("The value of the capacitor is: ");
+            putsUart0("The value of the capacitor is about ~: ");
             char cap_str[500];
-            sprintf(cap_str, "%d farads\n", cap);
+            sprintf(cap_str, "%d microFarads (uF) \n", cap);
             putsUart0(cap_str);
             valid = true;
         }
@@ -80,10 +78,20 @@ int main(void)
         {
             putsUart0("Measuring Inductance...\n");
             uint32_t induct = measureInductance();
-            putsUart0("The value of the capacitor is: ");
+            putsUart0("The value of the inductor is about ~: ");
             char induct_str[300];
             sprintf(induct_str, "%d henries\n", induct);
             putsUart0(induct_str);
+            valid = true;
+        }
+        if (isCommand(&data, "esr", 0))
+        {
+            putsUart0("Have not yet implemented functionality...\n");
+            valid = true;
+        }
+        if (isCommand(&data, "auto", 0))
+        {
+            putsUart0("Have not yet implemented functionality...\n");
             valid = true;
         }
         if (isCommand(&data, "test", 1))
@@ -111,7 +119,7 @@ int main(void)
             }
             valid = true;
         }
-        if(isCommand(&data, "help", 0))
+        if (isCommand(&data, "help", 0))
         {
             help();
             valid = true;
@@ -137,8 +145,10 @@ void help()
 {
     putsUart0("\nYou may use the following commands:\n");
     putsUart0("\r\t- type <resistor>, returns the resistance in (ohms).\n");
-    putsUart0("\r\t- type <capacitance>, returns the capacitance in (farads).\n");
-    putsUart0("\r\t- type <inductance>, returns the inductance in (henries).\n");
+    putsUart0(
+            "\r\t- type <capacitance>, returns the capacitance in (farads).\n");
+    putsUart0(
+            "\r\t- type <inductance>, returns the inductance in (henries).\n");
 
     putsUart0("\r\t- type <clear>, clears the screen.\n");
     putsUart0("\r\t- type <reset>, resets the hardware.\n");
