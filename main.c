@@ -13,6 +13,8 @@
 #include "tm4c123gh6pm.h"
 #include "uart0.h"
 
+//defines
+#define MAX_BUFF 550
 //prototypes
 void initHw();
 void help();
@@ -58,7 +60,7 @@ int main(void)
             uint32_t res = measureResistance();
             putsUart0("The value of the resistor is about ~: ");
             //ATOI(res);
-            char res_str[300];
+            char res_str[MAX_BUFF];
             sprintf(res_str, "%d ohms\n", res);
             putsUart0(res_str);
 
@@ -68,10 +70,16 @@ int main(void)
         {
             putsUart0("Measuring Capacitance...\n");
             uint32_t cap = measureCapacitance();
-            putsUart0("The value of the capacitor is about ~: ");
-            char cap_str[500];
-            sprintf(cap_str, "%d microFarads (uF) \n", cap);
-            putsUart0(cap_str);
+            char cap_str[MAX_BUFF];
+            if (cap <= 0)
+                putsUart0("Value is too small to read..\n");
+            else
+            {
+                putsUart0("The value of the capacitor is about ~: ");
+                sprintf(cap_str, "%d microFarads (uF) \n", cap);
+                putsUart0(cap_str);
+            }
+
             valid = true;
         }
         if (isCommand(&data, "inductance", 0))
@@ -79,14 +87,19 @@ int main(void)
             putsUart0("Measuring Inductance...\n");
             uint32_t induct = measureInductance();
             putsUart0("The value of the inductor is about ~: ");
-            char induct_str[300];
+            char induct_str[MAX_BUFF];
             sprintf(induct_str, "%d henries\n", induct);
             putsUart0(induct_str);
             valid = true;
         }
         if (isCommand(&data, "esr", 0))
         {
-            putsUart0("Have not yet implemented functionality...\n");
+            putsUart0("Measuring the voltage across DUT1-DUT2...\n");
+            double voltage = measureEsr();
+            putsUart0("The voltage is about ~: ");
+            char voltage_buff[MAX_BUFF];
+            sprintf(voltage_buff, "%f volts\n", voltage);
+            putsUart0(voltage_buff);
             valid = true;
         }
         if (isCommand(&data, "auto", 0))

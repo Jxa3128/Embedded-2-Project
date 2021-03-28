@@ -25,7 +25,7 @@
 #define BLUE_LED PORTF,2
 #define RED_LED PORTF,1
 
-#define CONST_RES 57
+#define CONST_RES 58
 #define CONST_CAP 100e3
 
 #define TEST_VALUE (2<<7)
@@ -71,7 +71,6 @@ void initMeasure()
 
     WTIMER0_TAV_R = 0;                          // zero counter for first period
     WTIMER0_TBV_R = 0;
-
 
     //1: enable clocks
     SYSCTL_RCGCACMP_R |= 1;
@@ -122,7 +121,7 @@ uint32_t measureResistance()
     disablePins();
     //do some math and divide to get accurate resistance and then return value
     //uint32_t k = WTIMER0_TAV_R/CONST_RES;
-    return (WTIMER0_TAV_R / CONST_RES);
+    return (WTIMER0_TAV_R / CONST_RES) + 1;
     //returns close resistance
 }
 
@@ -131,7 +130,7 @@ uint32_t measureResistance()
 uint32_t measureCapacitance()
 {
     disablePins();
-    setPinValue(LOWSIDE, 1); //discharge //ground both sides of capacitor
+    setPinValue(LOWSIDE, 1); //discharge
     waitMicrosecond(10e5); //wait a reasonable time
 
     //disable timer
@@ -146,7 +145,6 @@ uint32_t measureCapacitance()
     setPinValue(MEASURE_C, 1);
 
     //initiate measuring for capacitance
-    //waitMicrosecond(10e5);
     setPinValue(LOWSIDE, 0);
     setPinValue(HIGHSIDE, 1);
 
@@ -162,22 +160,49 @@ uint32_t measureCapacitance()
     disablePins();
 
     //return (WTIMER0_TAV_R/CONST_CAP);
-    return (WTIMER0_TAV_R*.00000018);
+    return (WTIMER0_TAV_R * 0.000000169334764); //value was found from a reoccuring pattern of 10/555 = .18 * .00000018
+    //plus six zeros since we want it in microfarads
 }
 
 uint32_t measureInductance()
 {
     disablePins();
+    setPinValue(LOWSIDE, 1);
+    waitMicrosecond(10e5); //wait a reasonable time
 
-    return TEST_VALUE;
+    //disable timer
+    WTIMER0_CTL_R &= ~TIMER_CTL_TAEN;
+
+    //reset timer register TAV and TBV (TBV isnt really needed)
+    WTIMER0_TAV_R = 0;
+    WTIMER0_TBV_R = 0;
+
+    //enable timer
+    WTIMER0_CTL_R |= TIMER_CTL_TAEN;
+
+    //turn LR MEASURE_LR on
+    setPinValue(MEASURE_LR, 1);
+
+    //stay blocking when it is not tripped - same thing as & with 2
+    while (!(COMP_ACSTAT0_R & (1 << 1)))
+        ; //this is in page 1226, status register
+
+    //stop counting
+    WTIMER0_CTL_R &= ~TIMER_CTL_TAEN;
+    //ground pins once again
+    disablePins();
+
+    return (WTIMER0_TAV_R * 33); //voltage will be rising on the 33
+    //ohms resistor to the reference of 2.469
+
 }
 double measureEsr()
 {
-    return (double)TEST_VALUE;
+    return (double) TEST_VALUE;
 }
 double measureAuto()
 {
-    return (double)TEST_VALUE;
+    return (double) TEST_VALUE;
 }
 void disablePins()
 {
@@ -192,7 +217,6 @@ void disablePins()
     setPinValue(INTEGRATE, 0);
     setPinValue(HIGHSIDE, 0);
 }
-
 
 void reIniciar()
 {
