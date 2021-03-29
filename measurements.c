@@ -192,7 +192,7 @@ uint32_t measureInductance()
     //ground pins once again
     disablePins();
 
-    return (WTIMER0_TAV_R * 33); //voltage will be rising on the 33
+    return (WTIMER0_TAV_R*.628); //voltage will be rising on the 33
     //ohms resistor to the reference of 2.469
 
 }

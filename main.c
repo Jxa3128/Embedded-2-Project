@@ -88,7 +88,7 @@ int main(void)
             uint32_t induct = measureInductance();
             putsUart0("The value of the inductor is about ~: ");
             char induct_str[MAX_BUFF];
-            sprintf(induct_str, "%d henries\n", induct);
+            sprintf(induct_str, "%d microhenries\n", induct);
             putsUart0(induct_str);
             valid = true;
         }
