@@ -15,12 +15,12 @@
 
 //defines
 #define MAX_BUFF 550
+
 //prototypes
 void initHw();
 void help();
 
 int main(void)
-
 {
     //initializations of hardware,Peripheral, etc
     initHw();
@@ -88,18 +88,19 @@ int main(void)
             uint32_t induct = measureInductance();
             putsUart0("The value of the inductor is about ~: ");
             char induct_str[MAX_BUFF];
+
             sprintf(induct_str, "%d microhenries\n", induct);
             putsUart0(induct_str);
             valid = true;
         }
         if (isCommand(&data, "esr", 0))
         {
-            putsUart0("Measuring the voltage across DUT1-DUT2...\n");
-            double voltage = measureEsr();
-            putsUart0("The voltage is about ~: ");
-            char voltage_buff[MAX_BUFF];
-            sprintf(voltage_buff, "%f volts\n", voltage);
-            putsUart0(voltage_buff);
+            putsUart0("Measuring the esr across DUT1-DUT2...\n");
+            double esr = measureEsr();
+            putsUart0("The esr is about ~: ");
+            char esr_buff[MAX_BUFF];
+            sprintf(esr_buff, "%f ohms\n", esr);
+            putsUart0(esr_buff);
             valid = true;
         }
         if (isCommand(&data, "auto", 0))

@@ -27,7 +27,8 @@
 
 #define CONST_RES 58
 #define CONST_CAP 100e3
-
+#define INDUCT 1
+#define ESR_OFFSET 4.7
 #define TEST_VALUE (2<<7)
 
 void initMeasure()
@@ -206,7 +207,7 @@ double measureEsr()
     double result = 0.0;
     double dut2Voltage = getVoltage();
     //do some math
-    result = (33*(3.3-dut2Voltage))/(dut2Voltage)-4.7;
+    result = (33*(3.3-dut2Voltage))/(dut2Voltage)-ESR_OFFSET;
     return result;
 }
 //get the votlage on DUT2
