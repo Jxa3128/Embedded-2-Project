@@ -214,7 +214,7 @@ double measureEsr()
 double getVoltage()
 {
     uint32_t DUT2_raw = readAdc();
-    double voltage = ((DUT2_raw - 0.5) / 4096.0 * 3.3);
+    double voltage = ((DUT2_raw) / 4096.0 * 3.3);
     return voltage;
 }
 void initAdc()
