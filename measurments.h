@@ -19,5 +19,8 @@ uint32_t measureCapacitance();
 uint32_t measureInductance();
 double measureAuto();
 double measureEsr();
-
+void initAdc();
+void setAdcMux(uint8_t input);
+double getVoltage();
+uint32_t readAdc();
 #endif /* MEASURMENTS_H_ */

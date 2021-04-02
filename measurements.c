@@ -54,7 +54,8 @@ void initMeasure()
 
     //initalizing the ADC will go here - PE4
     selectPinAnalogInput(ADC);
-
+    initAdc();
+    setAdcMux(9);
     //now we have to initialize the Analog Comparator
     selectPinAnalogInput(AC); //PC7 - AFSEL_R,DEN_R and AMSEL_R
 
@@ -168,7 +169,7 @@ uint32_t measureInductance()
 {
     disablePins();
     setPinValue(LOWSIDE, 1);
-    waitMicrosecond(10e5); //wait a reasonable time
+    waitMicrosecond(3e6); //wait a reasonable time
 
     //disable timer
     WTIMER0_CTL_R &= ~TIMER_CTL_TAEN;
@@ -192,14 +193,60 @@ uint32_t measureInductance()
     //ground pins once again
     disablePins();
 
-    return (WTIMER0_TAV_R*.628); //voltage will be rising on the 33
+    return (WTIMER0_TAV_R * .628); //voltage will be rising on the 33 -> *.628, 37631
     //ohms resistor to the reference of 2.469
 
 }
 double measureEsr()
 {
-    return (double) TEST_VALUE;
+    disablePins();
+    setPinValue(LOWSIDE, 1);
+    setPinValue(MEASURE_LR, 1);
+    waitMicrosecond(5e5);
+    double result = 0.0;
+    double dut2Voltage = getVoltage();
+    //do some math
+    result = (33*(3.3-dut2Voltage))/(dut2Voltage)-4.7;
+    return result;
 }
+//get the votlage on DUT2
+double getVoltage()
+{
+    uint32_t DUT2_raw = readAdc();
+    double voltage = ((DUT2_raw - 0.5) / 4096.0 * 3.3);
+    return voltage;
+}
+void initAdc()
+{
+    // Enable clocks
+    SYSCTL_RCGCADC_R |= SYSCTL_RCGCADC_R0;
+    _delay_cycles(16);
+
+    // Configure ADC
+    ADC0_ACTSS_R &= ~ADC_ACTSS_ASEN3; // disable sample sequencer 3 (SS3) for programming
+    ADC0_CC_R = ADC_CC_CS_SYSPLL; // select PLL as the time base (not needed, since default value)
+    ADC0_PC_R = ADC_PC_SR_1M;                        // select 1Msps rate
+    ADC0_EMUX_R = ADC_EMUX_EM3_PROCESSOR; // select SS3 bit in ADCPSSI as trigger
+    ADC0_SSCTL3_R = ADC_SSCTL3_END0;             // mark first sample as the end
+    ADC0_ACTSS_R |= ADC_ACTSS_ASEN3;                 // enable SS3 for operation
+}
+void setAdcMux(uint8_t input)
+{
+    ADC0_ACTSS_R &= ~ADC_ACTSS_ASEN3; // disable sample sequencer 3 (SS3) for programming
+    ADC0_SSMUX3_R = input;                 // Set analog input for single sample
+    ADC0_ACTSS_R |= ADC_ACTSS_ASEN3;                 // enable SS3 for operation
+}
+// Request and read one sample from SS3
+uint32_t readAdc()
+{
+    ADC0_PSSI_R |= ADC_PSSI_SS3;                     // set start bit
+    while (ADC0_ACTSS_R & ADC_ACTSS_BUSY)
+        ;           // wait until SS3 is not busy
+    while (ADC0_SSFSTAT3_R & ADC_SSFSTAT3_EMPTY)
+        ;
+    return ADC0_SSFIFO3_R;                    // get single result from the FIFO
+}
+//maybe extra credit, is fo, I will not do it
 double measureAuto()
 {
     return (double) TEST_VALUE;
