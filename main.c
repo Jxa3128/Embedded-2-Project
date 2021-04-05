@@ -103,6 +103,14 @@ int main(void)
             putsUart0(esr_buff);
             valid = true;
         }
+        if (isCommand(&data, "voltage", 0))
+        {
+            putsUart0("Measuring voltage...\n");
+            float realVoltage = getFullVoltage();
+            char volt_buff[MAX_BUFF];
+            sprintf(volt_buff, "%f volts.\n", realVoltage);
+            valid = true;
+        }
         if (isCommand(&data, "auto", 0))
         {
             putsUart0("Have not yet implemented functionality...\n");

@@ -9,6 +9,7 @@
 #include "wait.h"
 #include "uart0.h"
 #include "tm4c123gh6pm.h"
+#include <math.h>
 
 //define
 //left side of the board
@@ -168,10 +169,20 @@ uint32_t measureCapacitance()
 
 uint32_t measureInductance()
 {
+    //tc for time constant
+    double tc = 0.0;
+    double esr = measureEsr();
+    double current = 0.0;
+    double inductance_value = 0.0;
     disablePins();
-    setPinValue(LOWSIDE, 1);
-    waitMicrosecond(3e6); //wait a reasonable time
 
+    //de-energize the inductor
+    setPinValue(MEASURE_C, 1);
+    setPinValue(LOWSIDE, 1);
+
+    waitMicrosecond(5e5); //wait a reasonable time
+    //turn off measure_c off
+    setPinValue(MEASURE_C, 0);
     //disable timer
     WTIMER0_CTL_R &= ~TIMER_CTL_TAEN;
 
@@ -179,11 +190,11 @@ uint32_t measureInductance()
     WTIMER0_TAV_R = 0;
     WTIMER0_TBV_R = 0;
 
-    //enable timer
-    WTIMER0_CTL_R |= TIMER_CTL_TAEN;
-
     //turn LR MEASURE_LR on
     setPinValue(MEASURE_LR, 1);
+
+    //enable timer
+    WTIMER0_CTL_R |= TIMER_CTL_TAEN;
 
     //stay blocking when it is not tripped - same thing as & with 2
     while (!(COMP_ACSTAT0_R & (1 << 1)))
@@ -191,10 +202,21 @@ uint32_t measureInductance()
 
     //stop counting
     WTIMER0_CTL_R &= ~TIMER_CTL_TAEN;
+
+    //calculate time to voltage ref
+    tc = ((double) (WTIMER0_TAV_R)) / (CLOCK_RATE);
+
+    double R_total = esr + 33.0;
+    //find i -> for current
+    current = (V_REF) / (R_total); //V-ref/R_total -> ohms law
+
+    inductance_value = -(R_total * tc) / (log(1 - (R_total * current) / 3.3)); //L=(-R_t*t)/
+    //stop counting
+
     //ground pins once again
     disablePins();
 
-    return (WTIMER0_TAV_R * .628); //voltage will be rising on the 33 -> *.628, 37631
+    return (double) (inductance_value*1e6); //voltage will be rising on the 33 -> *.628, 37631
     //ohms resistor to the reference of 2.469
 
 }
@@ -207,7 +229,7 @@ double measureEsr()
     double result = 0.0;
     double dut2Voltage = getVoltage();
     //do some math
-    result = (33*(3.3-dut2Voltage))/(dut2Voltage)-ESR_OFFSET;
+    result = (33 * (3.3 - dut2Voltage)) / (dut2Voltage) - ESR_OFFSET;
     return result;
 }
 //get the votlage on DUT2
@@ -247,7 +269,7 @@ uint32_t readAdc()
         ;
     return ADC0_SSFIFO3_R;                    // get single result from the FIFO
 }
-//maybe extra credit, is fo, I will not do it
+//maybe extra credit, is so, I will not do it
 double measureAuto()
 {
     return (double) TEST_VALUE;
@@ -272,7 +294,14 @@ void reIniciar()
     putsUart0("TM4C123 has been reset!\n");
     NVIC_APINT_R = NVIC_APINT_VECTKEY | NVIC_APINT_VECT_RESET;
 }
-
+float getFullVoltage()
+{
+    //up to 3.3V
+    //ground left side
+    //read adc
+    //return value
+    return TEST_VALUE;
+}
 void testBoard()
 {
     //RIGHT SIDE

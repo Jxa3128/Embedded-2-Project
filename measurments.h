@@ -10,6 +10,9 @@
 #ifndef MEASURMENTS_H_
 #define MEASURMENTS_H_
 
+#define CLOCK_RATE 40e6
+#define V_REF 2.469
+
 void initMeasure();
 uint32_t measureResistance();
 void disablePins();
@@ -21,6 +24,7 @@ double measureAuto();
 double measureEsr();
 void initAdc();
 void setAdcMux(uint8_t input);
-double getVoltage();
+double getVoltage(); //esr
 uint32_t readAdc();
+float getFullVoltage(); //measure up to 3.3V voltage for source
 #endif /* MEASURMENTS_H_ */
