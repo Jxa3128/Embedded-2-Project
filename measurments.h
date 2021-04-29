@@ -12,6 +12,7 @@
 
 #define CLOCK_RATE 40e6
 #define V_REF 2.469
+#define MAX_BUFF 550
 
 void initMeasure();
 uint32_t measureResistance();
@@ -20,7 +21,7 @@ void testBoard();
 void reIniciar();
 uint32_t measureCapacitance();
 uint32_t measureInductance();
-double measureAuto();
+void measureAuto();
 double measureEsr();
 void initAdc();
 void setAdcMux(uint8_t input);

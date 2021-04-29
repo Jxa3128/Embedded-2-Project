@@ -13,8 +13,7 @@
 #include "tm4c123gh6pm.h"
 #include "uart0.h"
 
-//defines
-#define MAX_BUFF 550
+
 
 //prototypes
 void initHw();
@@ -109,11 +108,13 @@ int main(void)
             float realVoltage = getFullVoltage();
             char volt_buff[MAX_BUFF];
             sprintf(volt_buff, "%f volts.\n", realVoltage);
+            putsUart0(volt_buff);
             valid = true;
         }
         if (isCommand(&data, "auto", 0))
         {
-            putsUart0("Have not yet implemented functionality...\n");
+            putsUart0("Determining what you have...\n");
+            measureAuto();
             valid = true;
         }
         if (isCommand(&data, "test", 1))
@@ -171,8 +172,11 @@ void help()
             "\r\t- type <capacitance>, returns the capacitance in (farads).\n");
     putsUart0(
             "\r\t- type <inductance>, returns the inductance in (henries).\n");
-
+    putsUart0("\r\t- type <esr>, returns the esr of the inductor.\n");
+    putsUart0(
+            "\r\t- type <voltage>, returns the voltage 0V up to a 3.3V DC source.\n");
     putsUart0("\r\t- type <clear>, clears the screen.\n");
     putsUart0("\r\t- type <reset>, resets the hardware.\n");
+    putsUart0("\r\t- type <test>, tests the DUT1 and DUT2.\n");
 }
 

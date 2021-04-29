@@ -10,8 +10,9 @@
 #include "uart0.h"
 #include "tm4c123gh6pm.h"
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-//define
 //left side of the board
 #define MEASURE_LR PORTA,2 //PA2
 #define MEASURE_C PORTE,2 //PE2
@@ -31,6 +32,13 @@
 #define INDUCT 1
 #define ESR_OFFSET 4.7
 #define TEST_VALUE (2<<7)
+
+#define MAX_CAP 0x37E11D60  //0 to this number micro is our range (150*.00000016)base_16
+#define MAX_INDUCT 0x37E11D60 //this as well from above define
+
+#define NONCAP 69
+#define NONINDUCT 70
+#define CEM 100
 
 void initMeasure()
 {
@@ -152,8 +160,16 @@ uint32_t measureCapacitance()
     setPinValue(HIGHSIDE, 1);
 
     //stay blocking when it is not tripped - same thing as & with 2
-    while (!(COMP_ACSTAT0_R & (1 << 1)))
-        ; //this is in page 1226, status register
+    while (!(COMP_ACSTAT0_R & (1 << 1))) //this is in page 1226, status register
+    {
+        if (WTIMER0_TAV_R > MAX_CAP)
+        {
+            putsUart0("Keep on waiting please...\n");
+            WTIMER0_CTL_R &= ~TIMER_CTL_TAEN;
+            disablePins();
+            return (NONCAP);
+        }
+    }
 
     //waitMicrosecond(10e6);
     //make sure it is not counting
@@ -197,8 +213,16 @@ uint32_t measureInductance()
     WTIMER0_CTL_R |= TIMER_CTL_TAEN;
 
     //stay blocking when it is not tripped - same thing as & with 2
-    while (!(COMP_ACSTAT0_R & (1 << 1)))
-        ; //this is in page 1226, status register
+    while (!(COMP_ACSTAT0_R & (1 << 1))) //this is in page 1226, status register
+    {
+        if (WTIMER0_TAV_R > MAX_INDUCT)
+        {
+            putsUart0("Keep on waiting please...\n");
+            WTIMER0_CTL_R &= ~TIMER_CTL_TAEN;
+            disablePins();
+            return (NONINDUCT);
+        }
+    }
 
     //stop counting
     WTIMER0_CTL_R &= ~TIMER_CTL_TAEN;
@@ -216,7 +240,7 @@ uint32_t measureInductance()
     //ground pins once again
     disablePins();
 
-    return (double) (inductance_value*1e6); //voltage will be rising on the 33 -> *.628, 37631
+    return (double) (inductance_value * 1e6); //voltage will be rising on the 33 -> *.628, 37631
     //ohms resistor to the reference of 2.469
 
 }
@@ -269,10 +293,49 @@ uint32_t readAdc()
         ;
     return ADC0_SSFIFO3_R;                    // get single result from the FIFO
 }
-//maybe extra credit, is so, I will not do it
-double measureAuto()
+//final thing for project
+void measureAuto()
 {
-    return (double) TEST_VALUE;
+    //buffers for sprintf
+    char resBuff[MAX_BUFF];
+    char capBuff[MAX_BUFF];
+    char idBuff[MAX_BUFF];
+
+    disablePins();
+
+    //Retrieve values
+    uint32_t res = measureResistance();
+    uint32_t cap = measureCapacitance();
+    uint32_t id = measureInductance();
+
+    //print resistance does not work with cap and induct
+    if(res == NONCAP && res == NONINDUCT)
+    {
+        sprintf(resBuff, "Resistance found of %d ohms.\n", res);
+        putsUart0(resBuff);
+    }
+    //print cap
+    if(id > 150 && res < 10)
+    {
+        sprintf(capBuff, "Capacitor found of %d microFarads.\n", cap);
+        putsUart0(capBuff);
+    }
+    //print inductor
+    if(cap == NONCAP && res < CEM)
+    {
+        sprintf(idBuff, "Inductance found of %f microHenries.\n", id);
+        putsUart0(idBuff);
+    }
+    //this was for testing purposes
+    /*
+    sprintf(resBuff, "Resistance found of %d ohms.\n", res);
+    sprintf(capBuff, "Capacitor found of %d microFarads.\n", cap);
+    sprintf(idBuff, "Inductance found of %f ohms.\n", id);
+
+    putsUart0(resBuff);
+    putsUart0(capBuff);
+    putsUart0(idBuff);
+    */
 }
 void disablePins()
 {
@@ -300,7 +363,11 @@ float getFullVoltage()
     //ground left side
     //read adc
     //return value
-    return TEST_VALUE;
+
+    disablePins();
+    setPinValue(MEASURE_C, 1);
+    float v = getVoltage();
+    return v;
 }
 void testBoard()
 {
