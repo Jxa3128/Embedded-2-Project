@@ -309,7 +309,7 @@ void measureAuto()
     uint32_t id = measureInductance();
 
     //print resistance does not work with cap and induct
-    if(res == NONCAP && res == NONINDUCT)
+    if(cap == NONCAP && id == NONINDUCT)
     {
         sprintf(resBuff, "Resistance found of %d ohms.\n", res);
         putsUart0(resBuff);
