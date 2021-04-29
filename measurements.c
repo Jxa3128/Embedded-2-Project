@@ -240,7 +240,7 @@ uint32_t measureInductance()
     //ground pins once again
     disablePins();
 
-    return (double) (inductance_value * 1e6); //voltage will be rising on the 33 -> *.628, 37631
+    return (double) (inductance_value * 1e6) - 8; //voltage will be rising on the 33 -> *.628, 37631
     //ohms resistor to the reference of 2.469
 
 }
@@ -323,7 +323,7 @@ void measureAuto()
     //print inductor
     if(cap == NONCAP && res < CEM)
     {
-        sprintf(idBuff, "Inductance found of %f microHenries.\n", id);
+        sprintf(idBuff, "Inductance found of %d microHenries.\n", id);
         putsUart0(idBuff);
     }
     //this was for testing purposes
