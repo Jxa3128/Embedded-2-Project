@@ -162,6 +162,7 @@ uint32_t measureCapacitance()
     //stay blocking when it is not tripped - same thing as & with 2
     while (!(COMP_ACSTAT0_R & (1 << 1))) //this is in page 1226, status register
     {
+
         if (WTIMER0_TAV_R > MAX_CAP)
         {
             putsUart0("Keep on waiting please...\n");
@@ -240,7 +241,7 @@ uint32_t measureInductance()
     //ground pins once again
     disablePins();
 
-    return (double) (inductance_value * 1e6) - 8; //voltage will be rising on the 33 -> *.628, 37631
+    return (double) (inductance_value * 1e6) - 6; //voltage will be rising on the 33 -> *.628, 37631
     //ohms resistor to the reference of 2.469
 
 }
@@ -369,6 +370,7 @@ float getFullVoltage()
     float v = getVoltage();
     return v;
 }
+
 void testBoard()
 {
     //RIGHT SIDE

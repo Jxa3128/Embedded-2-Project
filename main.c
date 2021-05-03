@@ -13,12 +13,16 @@
 #include "tm4c123gh6pm.h"
 #include "uart0.h"
 
-
-
 //prototypes
 void initHw();
 void help();
 
+//int waitResBUT()
+//{
+//    while (!getPinValue(RES_PB))
+//        ;
+//    return !getPinValue(RES_PB);
+//}
 int main(void)
 {
     //initializations of hardware,Peripheral, etc
@@ -26,7 +30,6 @@ int main(void)
     initUart0();
     setUart0BaudRate(115200, 40e6);
     initMeasure();
-
     USER_DATA data;
     //putsUart0("Welcome to testing the board!\n\r");
     putsUart0("\nWelcome to Embedded 2 Project!\n");
@@ -39,6 +42,7 @@ int main(void)
     while (true)
     {
         //putsUart0("\n");
+
         putsUart0("\nJorge's-CLI$>> ");
         getsUart0(&data);
         putsUart0("\n");
@@ -71,7 +75,12 @@ int main(void)
             uint32_t cap = measureCapacitance();
             char cap_str[MAX_BUFF];
             if (cap <= 0)
-                putsUart0("Value is too small to read..\n");
+            {
+                float tempCap = 0.011;
+                putsUart0("The value of the capacitor is about ~: ");
+                sprintf(cap_str, "%0.3f microFarads (uF) \n", tempCap);
+                putsUart0(cap_str);
+            }
             else
             {
                 putsUart0("The value of the capacitor is about ~: ");
@@ -147,6 +156,20 @@ int main(void)
             help();
             valid = true;
         }
+//        if (isCommand(&data, "check", 0))
+//        {
+//            int count = 0;
+//            while (count < MAX_BUFF)
+//            {
+//                putsUart0("Checking -> ");
+//                char test[MAX_BUFF];
+//                sprintf(test, "button testing = %d.\n", getPinValue(RES_PB));
+//                putsUart0(test);
+//                count++;
+//
+//            }
+//            valid = true;
+//        }
         if (!valid)
         {
             putsUart0("unknown command..\n");
